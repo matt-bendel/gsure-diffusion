@@ -74,7 +74,7 @@ class Trainer(Infra):
                 img = data["image"]
                 mask = data["mask"]
             else:
-                img = data
+                img = data.float()
                 mask = torch.ones_like(data)
             self.image = self.set_device(img)
             self.mask = self.set_device(mask.long())
