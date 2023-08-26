@@ -60,8 +60,6 @@ class DataTransform:
 
         # coil combine
         S = sp.linop.Multiply((384, 384), sense_maps)
-        print(coil_compressed_x.transpose(2, 0, 1).shape)
-        exit()
         coil_combined_x = S.H * coil_compressed_x.transpose(2, 0, 1)
 
         kspace = fft(coil_combined_x, (0, 1))
