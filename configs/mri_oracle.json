@@ -1,15 +1,15 @@
 {
     "name": "mri_oracle", // experiments name
-    "gpu_ids": [0], // gpu ids list, default is single 0
-    "seed" : -1, // random seed, seed <0 represents randomization not used 
+    "gpu_ids": [0, 1, 2, 3], // gpu ids list, default is single 0
+    "seed" : 1, // random seed, seed <0 represents randomization not used
     "finetune_norm": false, // find the parameters to optimize
 
     "path": { //set every part file path
-        "base_dir": "experiments", // base path for all log except resume_state
-        "code": "code", // code backup
-        "tb_logger": "tb_logger", // path of tensorboard logger
-        "results": "results",
-        "checkpoint": "checkpoint",
+        "base_dir": "/storage/matt_models/mri/diffusion/experiments", // base path for all log except resume_state
+        "code": "/storage/matt_models/mri/diffusion/code", // code backup
+        "tb_logger": "/storage/matt_models/mri/diffusion/tb_logger", // path of tensorboard logger
+        "results": "/storage/matt_models/mri/diffusion/results",
+        "checkpoint": "/storage/matt_models/mri/diffusion/checkpoint",
         "resume_state": null
         // "resume_state": null // ex: 100, loading .state  and .pth from given epoch and iteration
     },
