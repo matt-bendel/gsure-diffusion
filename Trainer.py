@@ -136,8 +136,7 @@ class Trainer(Infra):
         with torch.no_grad():
             for i, val_data in tqdm.tqdm(enumerate(self.val_loader)):
                 self.set_input(val_data)
-                clean_image, noisy_image = self.diffusion.clean_image(model=self.netG, x_start=self.image,
-                                                  with_P=self.with_P)
+                clean_image, noisy_image = self.diffusion.clean_image(model=self.netG, x_start=self.image)
                 self.writer.set_iter(self.epoch, self.iter, phase='val')
                 for met in self.metrics:
                     key = met.__name__
