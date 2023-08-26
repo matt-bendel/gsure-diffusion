@@ -109,7 +109,7 @@ class H5_Loader(Dataset):
                                     gt_ksp.shape[2]))
         gt_ksp = sp.fft(gt_ksp, axes=(-2,))  # Back to k-space
 
-        gt_ksp = np.concatenate([np.real(gt_ksp), np.imag(gt_ksp)], axis=0)
+        gt_ksp = np.concatenate([np.expand_dims(np.real(gt_ksp), axis=0), np.expand_dims(np.imag(gt_ksp), axis=0)], axis=0)
         return gt_ksp
 
 
