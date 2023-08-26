@@ -123,7 +123,6 @@ class MRIDataModule(pl.LightningDataModule):
     def __init__(self, big_test=False):
         super().__init__()
         self.prepare_data_per_node = True
-        self.batch_size = batch_size
         self.big_test = big_test
 
     def prepare_data(self):
