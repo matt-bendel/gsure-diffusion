@@ -36,7 +36,7 @@ def define_network(logger, opt, network_opt):
     return net
 
 
-def main_worker(gpu, opt, wandb_run=''):
+def main_worker(pid, gpu, opt, wandb_run=''):
     if 'local_rank' not in opt:
         opt['local_rank'] = opt['global_rank'] = gpu
     if opt['distributed']:
