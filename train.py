@@ -90,7 +90,7 @@ def main_worker(gpu, opt, wandb_run=''):
     base_change = {None: None, "mri": ksp_to_viewable_image}[base_change]
 
     if gpu == 0 and wandb_run:
-        wandb_run = wandb.init(project="GSURE-Diffusion", entity=wandb_run, config={})
+        wandb_run = wandb.init(project="diffusion", entity=wandb_run, config={})
         wandb_run.config.update(opt)
     else:
         wandb_run = None
