@@ -62,8 +62,10 @@ class DataTransform:
         S = sp.linop.Multiply((384, 384), sense_maps)
         coil_combined_x = S.H * coil_compressed_x.transpose(2, 0, 1)
 
-        kspace = fft(coil_combined_x, (0, 1))
-        gt_ksp = np.concatenate([np.real(kspace), np.imag(kspace)], axis=0)
+        new_kspace = fft(coil_combined_x, (0, 1))
+        gt_ksp = np.concatenate([np.real(new_kspace), np.imag(new_kspace)], axis=0)
+
+        print(gt_ksp.shape)
 
         return gt_ksp
 

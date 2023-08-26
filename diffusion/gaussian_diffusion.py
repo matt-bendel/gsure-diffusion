@@ -772,9 +772,6 @@ class GaussianDiffusion:
         if noise is None:
             noise = th.randn_like(x_start)
 
-        print(x_start.shape)
-        exit()
-
         b, c, h, w = x_start.shape
 
         # add noise for the parts that are missing
