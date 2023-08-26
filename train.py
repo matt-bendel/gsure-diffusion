@@ -36,9 +36,9 @@ def define_network(logger, opt, network_opt):
     return net
 
 
-def main_worker(pid, gpu, opt, wandb_run=''):
+def main_worker(gpu, opt, wandb_run=''):
     if 'local_rank' not in opt:
-        opt['local_rank'] = gpu
+        opt['local_rank'] = opt['global_rank'] = gpu
     print(opt['local_rank'])
     exit()
     if opt['distributed']:
@@ -148,7 +148,7 @@ if __name__ == '__main__':
         ngpus_per_node = len(opt['gpu_ids'])
         opt['world_size'] = ngpus_per_node
         opt['init_method'] = 'tcp://127.0.0.1:' + args.port
-        mp.spawn(main_worker, args=(ngpus_per_node, opt, args.wandb))
+        mp.spawn(main_worker, args=(opt, args.wandb), nprocs=ngpus_per_node)
     else:
         opt['world_size'] = 1
         main_worker(0, opt, args.wandb)
