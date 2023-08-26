@@ -46,7 +46,7 @@
             "dataloader":{
                 "args":{ // arguments to initialize train_dataloader
                     "batch_size": 4, // batch size in each gpu
-                    "num_workers": 0,
+                    "num_workers": 4,
                     "shuffle": false,
                     "pin_memory": true,
                     "drop_last": false
