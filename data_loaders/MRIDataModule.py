@@ -58,16 +58,16 @@ class DataTransform:
         # TODO: Save SVD matrix offline
         coil_compressed_x = ImageCropandKspaceCompression(x, None)  # (384, 384, 8)
 
+        print(f"Coil Compressed: {coil_compressed_x.shape}")
+
         # coil combine
         S = sp.linop.Multiply((384, 384), sense_maps)
         coil_combined_x = S.H * coil_compressed_x.transpose(2, 0, 1)
+        print(f"Coil Compressed: {coil_compressed_x.shape}")
 
-        new_kspace = fft(coil_combined_x, (0, 1))
-        gt_ksp = np.concatenate([np.real(new_kspace), np.imag(new_kspace)], axis=0)
+        gt_ksp = fft(coil_combined_x, (0, 1))
 
-        print(gt_ksp.shape)
-
-        return gt_ksp
+        return np.concatenate([np.expand_dims(np.real(gt_ksp), axis=0), np.expand_dims(np.imag(gt_ksp), axis=0)], axis=0)
 
 
 def reduce_resolution(im):
