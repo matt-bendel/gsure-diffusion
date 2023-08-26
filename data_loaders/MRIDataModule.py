@@ -178,8 +178,7 @@ class MRIDataModule(pl.LightningDataModule):
             num_workers=10,
             sampler=sampler,
             drop_last=True,
-            pin_memory=True,
-            shuffle=True
+            pin_memory=True
         )
 
     def val_dataloader(self):
