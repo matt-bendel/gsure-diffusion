@@ -66,25 +66,18 @@ def main_worker(gpu, opt, wandb_run=''):
                                   model_var_type=gd.ModelVarType.FIXED_LARGE,
                                   loss_type=gd.LossType.MSE)
 
-    train_dataset = init_obj(opt['datasets']['train']['which_dataset'], phase_logger, default_file_name='data.dataset',
-                             init_type='Dataset')
-    val_dataset = init_obj(opt['datasets']['validation']['which_dataset'], phase_logger,
-                           default_file_name='data.dataset', init_type='Dataset')
-
-    data_sampler = None
-    loader_opts = dict(**opt['datasets']['train']['dataloader']['args'])
-    val_loader_opts = dict(**opt['datasets']['validation']['dataloader']['args'])
-    if opt['distributed']:
-        data_sampler = DistributedSampler(train_dataset,
-                                          shuffle=opt['datasets']['train']['dataloader']['args']['shuffle'],
-                                          num_replicas=opt['world_size'],
-                                          rank=opt['global_rank'])
-        loader_opts["shuffle"] = False
-
     dm = MRIDataModule()
     dm.setup()
 
-    train_loader = dm.train_dataloader()  # data.DataLoader(train_dataset, sampler=data_sampler, **loader_opts)
+    data_sampler = None
+    if opt['distributed']:
+        data_sampler = DistributedSampler(dm.train,
+                                          shuffle=opt['datasets']['train']['dataloader']['args']['shuffle'],
+                                          num_replicas=opt['world_size'],
+                                          rank=opt['global_rank'])
+
+
+    train_loader = dm.train_dataloader(data_sampler)  # data.DataLoader(train_dataset, sampler=data_sampler, **loader_opts)
     val_loader = dm.val_dataloader()  # data.DataLoader(val_dataset, **val_loader_opts)
 
     base_change = opt['model']['base_change'] if 'base_change' in opt['model'] else None
@@ -96,7 +89,7 @@ def main_worker(gpu, opt, wandb_run=''):
     else:
         wandb_run = None
 
-    print("Dataset size: ", len(train_dataset))
+    print("Dataset size: ", len(dm.train))
 
     trainer = Trainer(
         network=model,
@@ -146,7 +139,6 @@ if __name__ == '__main__':
     if opt['distributed']:
         ngpus_per_node = len(opt['gpu_ids'])
         opt['world_size'] = ngpus_per_node
-        opt['init_method'] = 'tcp://127.0.0.1:' + args.port
         mp.spawn(main_worker, args=(opt, args.wandb), nprocs=ngpus_per_node)
     else:
         opt['world_size'] = 1
