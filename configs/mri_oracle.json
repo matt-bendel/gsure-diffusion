@@ -81,7 +81,7 @@
                 "num_res_blocks":  2,
                 "attn_resolutions":  [20],
                 "dropout":  0.1,
-                "image_size":  320,
+                "image_size":  384,
                 "resamp_with_conv": true
             }
         },
