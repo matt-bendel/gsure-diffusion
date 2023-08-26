@@ -82,6 +82,7 @@ def main_worker(gpu, opt, wandb_run=''):
         loader_opts["shuffle"] = False
 
     dm = MRIDataModule()
+    dm.setup()
 
     train_loader = dm.train_dataloader()  # data.DataLoader(train_dataset, sampler=data_sampler, **loader_opts)
     val_loader = dm.val_dataloader()  # data.DataLoader(val_dataset, **val_loader_opts)
