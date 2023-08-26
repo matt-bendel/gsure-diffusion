@@ -139,6 +139,7 @@ if __name__ == '__main__':
     if opt['distributed']:
         ngpus_per_node = len(opt['gpu_ids'])
         opt['world_size'] = ngpus_per_node
+        opt['init_method'] = 'tcp://127.0.0.1:' + args.port
         mp.spawn(main_worker, args=(opt, args.wandb), nprocs=ngpus_per_node)
     else:
         opt['world_size'] = 1
