@@ -120,11 +120,10 @@ class MRIDataModule(pl.LightningDataModule):
     DataModule used for semantic segmentation in geometric generalization project
     """
 
-    def __init__(self, batch_size, mask_type, big_test=False):
+    def __init__(self, big_test=False):
         super().__init__()
         self.prepare_data_per_node = True
         self.batch_size = batch_size
-        self.mask_type = mask_type
         self.big_test = big_test
 
     def prepare_data(self):
@@ -176,8 +175,8 @@ class MRIDataModule(pl.LightningDataModule):
     def train_dataloader(self):
         return DataLoader(
             dataset=self.train,
-            batch_size=self.batch_size,
-            num_workers=4,
+            batch_size=32,
+            num_workers=20,
             drop_last=True,
             pin_memory=False
         )
@@ -185,8 +184,8 @@ class MRIDataModule(pl.LightningDataModule):
     def val_dataloader(self):
         return DataLoader(
             dataset=self.validate,
-            batch_size=self.batch_size,
-            num_workers=20,
+            batch_size=4,
+            num_workers=4,
             drop_last=True,
             pin_memory=False
         )
