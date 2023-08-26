@@ -39,8 +39,6 @@ def define_network(logger, opt, network_opt):
 def main_worker(gpu, opt, wandb_run=''):
     if 'local_rank' not in opt:
         opt['local_rank'] = opt['global_rank'] = gpu
-    print(opt['local_rank'])
-    exit()
     if opt['distributed']:
         torch.cuda.set_device(int(opt['local_rank']))
         print('using GPU {} for training'.format(int(opt['local_rank'])))
