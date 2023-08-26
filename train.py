@@ -16,6 +16,8 @@ from diffusion.gaussian_diffusion import GaussianDiffusion, get_beta_schedule
 from core.parser import init_obj
 from diffusion import gaussian_diffusion as gd
 from mri_utils import ksp_to_viewable_image
+from data_loaders.MRIDataModule import MRIDataModule
+
 
 def mae(input, target):
     with torch.no_grad():
@@ -64,8 +66,10 @@ def main_worker(gpu, opt, wandb_run=''):
                                   model_var_type=gd.ModelVarType.FIXED_LARGE,
                                   loss_type=gd.LossType.MSE)
 
-    train_dataset = init_obj(opt['datasets']['train']['which_dataset'], phase_logger, default_file_name='data.dataset', init_type='Dataset')
-    val_dataset = init_obj(opt['datasets']['validation']['which_dataset'], phase_logger, default_file_name='data.dataset', init_type='Dataset')
+    train_dataset = init_obj(opt['datasets']['train']['which_dataset'], phase_logger, default_file_name='data.dataset',
+                             init_type='Dataset')
+    val_dataset = init_obj(opt['datasets']['validation']['which_dataset'], phase_logger,
+                           default_file_name='data.dataset', init_type='Dataset')
 
     data_sampler = None
     loader_opts = dict(**opt['datasets']['train']['dataloader']['args'])
@@ -77,8 +81,10 @@ def main_worker(gpu, opt, wandb_run=''):
                                           rank=opt['global_rank'])
         loader_opts["shuffle"] = False
 
-    train_loader = data.DataLoader(train_dataset, sampler=data_sampler, **loader_opts)
-    val_loader = data.DataLoader(val_dataset, **val_loader_opts)
+    dm = MRIDataModule(cfg, args.mask_type)
+
+    train_loader = dm.train_dataloader()  # data.DataLoader(train_dataset, sampler=data_sampler, **loader_opts)
+    val_loader = dm.val_dataloader()  # data.DataLoader(val_dataset, **val_loader_opts)
 
     base_change = opt['model']['base_change'] if 'base_change' in opt['model'] else None
     base_change = {None: None, "mri": ksp_to_viewable_image}[base_change]
@@ -123,7 +129,8 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--debug', action='store_true', help='Run script in debug setting')
     parser.add_argument('-P', '--port', default='21012', type=str, help='Port setting for DDP')
     parser.add_argument('-gpu', '--gpu_ids', type=str, default=None, help='GPU numbers to use for training')
-    parser.add_argument('--wandb', type=str, default='', help='W & B entity to use for wandb, leave empty for no W & B sync')
+    parser.add_argument('--wandb', type=str, default='',
+                        help='W & B entity to use for wandb, leave empty for no W & B sync')
 
     ''' parser configs '''
     args = parser.parse_args()

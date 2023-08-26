@@ -19,7 +19,7 @@
             "which_dataset": {  // import designated dataset using arguments 
                 "name": "MRILoader", // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{ // arguments to initialize dataset
-                    "data_root": "datasets/knee_mri_singlecoil/train_clean/",
+                    "data_root": "/storage/fastMRI_brain/data/multicoil_train",
                     "mask": false,
                     "data_len": -1
                 }
@@ -38,7 +38,7 @@
             "which_dataset": {  // import designated dataset using arguments
                 "name": "MRILoader", // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{ // arguments to initialize dataset
-                    "data_root": "datasets/knee_mri_singlecoil/val/",
+                    "data_root": "/storage/fastMRI_brain/data/multicoil_val",
                     "mask": false,
                     "data_len": 4
                 }

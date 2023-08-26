@@ -12,10 +12,12 @@ import sigpy as sp
 
 
 def shufflerow(tensor, axis):
-    row_perm = torch.rand(tensor.shape[:axis+1]).argsort(axis).to(tensor.device) # get permutation indices
-    for _ in range(tensor.ndim-axis-1): row_perm.unsqueeze_(-1)
-    row_perm = row_perm.repeat(*[1 for _ in range(axis+1)], *(tensor.shape[axis+1:]))  # reformat this for the gather operation
+    row_perm = torch.rand(tensor.shape[:axis + 1]).argsort(axis).to(tensor.device)  # get permutation indices
+    for _ in range(tensor.ndim - axis - 1): row_perm.unsqueeze_(-1)
+    row_perm = row_perm.repeat(*[1 for _ in range(axis + 1)],
+                               *(tensor.shape[axis + 1:]))  # reformat this for the gather operation
     return tensor.gather(axis, row_perm)
+
 
 def get_mask(batch_size=1, acs_lines=30, total_lines=320, R=1):
     # Overall sampling budget
@@ -24,11 +26,13 @@ def get_mask(batch_size=1, acs_lines=30, total_lines=320, R=1):
     # Get locations of ACS lines
     # !!! Assumes k-space is even sized and centered, true for fastMRI
     center_line_idx = torch.arange((total_lines - acs_lines) // 2,
-                                (total_lines + acs_lines) // 2)
+                                   (total_lines + acs_lines) // 2)
 
     # Find remaining candidates
-    outer_line_idx = torch.cat([torch.arange(0, (total_lines - acs_lines) // 2), torch.arange((total_lines + acs_lines) // 2, total_lines)])
-    random_line_idx = shufflerow(outer_line_idx.unsqueeze(0).repeat([batch_size, 1]), 1)[:, : num_sampled_lines - acs_lines]
+    outer_line_idx = torch.cat(
+        [torch.arange(0, (total_lines - acs_lines) // 2), torch.arange((total_lines + acs_lines) // 2, total_lines)])
+    random_line_idx = shufflerow(outer_line_idx.unsqueeze(0).repeat([batch_size, 1]), 1)[:,
+                      : num_sampled_lines - acs_lines]
     # random_line_idx = outer_line_idx[torch.randperm(outer_line_idx.shape[0])[:num_sampled_lines - acs_lines]]
 
     # Create a mask and place ones at the right locations
@@ -38,11 +42,12 @@ def get_mask(batch_size=1, acs_lines=30, total_lines=320, R=1):
 
     return mask
 
+
 class H5_Loader(Dataset):
     def __init__(self, file_list, input_dir,
                  project_dir='./',
                  R=1,
-                 image_size=(320, 320),
+                 image_size=(384, 384),
                  acs_size=26,
                  pattern='random',
                  orientation='vertical'):
@@ -88,7 +93,6 @@ class H5_Loader(Dataset):
         slice_idx = int(idx) if scan_idx == 0 else \
             int(idx - self.slice_mapper[scan_idx] + self.num_slices[scan_idx] - 1)
 
-
         # Load raw data for specific scan and slice
         raw_file = os.path.join(self.input_dir,
                                 os.path.basename(self.file_list[scan_idx]))
@@ -108,7 +112,8 @@ class H5_Loader(Dataset):
         gt_ksp = np.concatenate([np.real(gt_ksp), np.imag(gt_ksp)], axis=0)
         return gt_ksp
 
-def create_train(output_clean, output_corrupt, R=4, sigma = 0.01):
+
+def create_train(output_clean, output_corrupt, R=4, sigma=0.01):
     file_list = glob.glob(os.path.join("datasets/fmri/singlecoil_train", "*.h5"))
     input_dir = "datasets/fmri/singlecoil_train/"
     dataset = H5_Loader(file_list=file_list, input_dir=input_dir)
@@ -139,7 +144,7 @@ def create_train(output_clean, output_corrupt, R=4, sigma = 0.01):
 
 
 def create_validation(output):
-    file_list = glob.glob(os.path.join("datasets/fmri/singlecoil_val", "*.h5"))
+    file_list = glob.glob(os.path.join("/storage/fastNRI_brain/data/multicoil", "*.h5"))
     input_dir = "datasets/fmri/singlecoil_val/"
     dataset = H5_Loader(file_list=file_list, input_dir=input_dir)
     train_loader = data.DataLoader(
@@ -158,10 +163,11 @@ def create_validation(output):
 
     print(f"total {indx} datapoints")
 
-def main(output_dir, R, sigma):
-    create_train(os.path.join(output_dir, "train_clean"), os.path.join(output_dir, f"train_corrupted"), R=R, sigma=sigma)
-    create_validation(os.path.join(output_dir, "val"))
 
+def main(output_dir, R, sigma):
+    create_train(os.path.join(output_dir, "train_clean"), os.path.join(output_dir, f"train_corrupted"), R=R,
+                 sigma=sigma)
+    create_validation(os.path.join(output_dir, "val"))
 
 
 if __name__ == "__main__":
