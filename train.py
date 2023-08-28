@@ -108,7 +108,7 @@ def main_worker(gpu, opt, wandb_run=''):
         base_change=base_change,
         model_wrapper=(opt['model']['model_wrapper'] if 'model_wrapper' in opt['model'] else False),
         Lambda=(opt['model']['Lambda'] if 'Lambda' in opt['model'] else 1),
-        gsure=(opt['model']['gsure'] if 'gsure' in opt['model'] else True),
+        gsure=False,
         opt=opt
     )
 
