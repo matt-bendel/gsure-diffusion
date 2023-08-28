@@ -170,7 +170,7 @@ class MRIDataModule(pl.LightningDataModule):
     def train_dataloader(self, sampler):
         return DataLoader(
             dataset=self.train,
-            batch_size=4,
+            batch_size=8,
             num_workers=10,
             sampler=sampler,
             drop_last=True,
