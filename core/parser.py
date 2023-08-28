@@ -134,7 +134,8 @@ def parse(args):
     for key, path in opt['path'].items():
         if 'resume' not in key and 'base' not in key and 'root' not in key:
             opt['path'][key] = os.path.join(experiments_root, path)
-            mkdirs(opt['path'][key])
+            if not os.path.exists(opt['path'][key]):
+                mkdirs(opt['path'][key])
 
     ''' debug mode '''
     if args.debug:
