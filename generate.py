@@ -123,7 +123,7 @@ def main_worker(gpu, opt, args):
             samples = base_change(samples)
         for j in range(b):
             number = n[j].item()
-            save_image(samples[j], os.path.join(args.output, f"{number:06d}.png"))
+            save_image((0.5 + 0.5 * samples[j]), os.path.join(args.output, f"{number:06d}.png"))
 
 
 if __name__ == '__main__':
