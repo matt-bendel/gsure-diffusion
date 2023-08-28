@@ -19,7 +19,7 @@ def ksp_to_viewable_image(ksp, set_min=None, set_max=None):
         im = (im - set_min) / (set_max - set_min)
     else:
         im = (im - im.amin((1, 2, 3), keepdim=True)) / (im.amax((1, 2, 3), keepdim=True) - im.amin((1, 2, 3), keepdim=True))
-    return im * 2 - 1
+    return im
 
 def fft2c_new(data: torch.Tensor, norm: str = "ortho") -> torch.Tensor:
     """
