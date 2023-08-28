@@ -146,11 +146,7 @@ def parse(args):
             opt['train'].update(opt['debug'])
 
     ''' code backup '''
-    for name in os.listdir('.'):
-        if name in ['config', 'models', 'core', 'slurm', 'data', 'diffusion']:
-            shutil.copytree(name, os.path.join(opt['path']['code'], name), ignore=shutil.ignore_patterns("*.pyc", "__pycache__"))
-        if '.py' in name or '.sh' in name:
-            shutil.copy(name, opt['path']['code'])
+
     return dict_to_nonedict(opt)
 
 
