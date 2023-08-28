@@ -92,9 +92,6 @@ def main_worker(gpu, opt, args):
     base_change = {None: None, "mri": ksp_to_viewable_image}[base_change]
 
     if opt['global_rank'] == 0:
-        if os.path.exists(args.output):
-            shutil.rmtree(args.output)
-        os.makedirs(args.output, exist_ok=True)
         if opt['distributed']:
             torch.distributed.barrier()
     else:
