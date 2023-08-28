@@ -6,7 +6,6 @@ from functools import partial
 import torch
 
 from mri_utils import ksp_to_viewable_image, FFT_Wrapper, FFT_NN_Wrapper
-from torch_dct import idct_2d_shift
 
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
