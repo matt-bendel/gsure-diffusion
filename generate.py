@@ -111,7 +111,7 @@ def main_worker(gpu, opt, args):
     )
     for (n,) in tqdm(class_loader):
         b = n.shape[0]
-        z = torch.randn(b, opt['model']['network']['args']['out_channels'], *opt['datasets']['train']['which_dataset']['args']['image_size'])
+        z = torch.randn(b, opt['model']['network']['args']['out_channels'], 384, 384)
         z = Util.set_device(z, distributed=opt['distributed'])
         if args.ddim:
             samples = diffusion.ddim_sample_loop(model, z.shape, z, clip_denoised=False,
