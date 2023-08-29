@@ -163,6 +163,7 @@ def main():
     args.batch = 4
     args.debug = False
     opt = Parser.parse(args)
+    from core.logger import InfoLogger, VisualWriter
 
     phase_logger = InfoLogger(opt)
 
