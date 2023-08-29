@@ -146,10 +146,10 @@ class Diffusion(object):
 
             for i in range(len(pinv_y_0)):
                 tvu.save_image(
-                    inverse_data_transform(config, pinv_y_0[i]), os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
+                    inverse_data_transform(config, 0.5 + 0.5 * ksp_to_viewable_image(pinv_y_0[i])), os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
                 )
                 tvu.save_image(
-                    inverse_data_transform(config, x_orig[i]), os.path.join(self.args.image_folder, f"orig_{idx_so_far + i}.png")
+                    inverse_data_transform(config, 0.5 + 0.5 * ksp_to_viewable_image(x_orig[i])), os.path.join(self.args.image_folder, f"orig_{idx_so_far + i}.png")
                 )
 
             ##Begin DDIM
@@ -170,11 +170,11 @@ class Diffusion(object):
             for i in [-1]: #range(len(x)):
                 for j in range(x[i].size(0)):
                     tvu.save_image(
-                        x[i][j], os.path.join(self.args.image_folder, f"{idx_so_far + j}_{i}.png")
+                        0.5 + 0.5 * ksp_to_viewable_image(x[i][j]), os.path.join(self.args.image_folder, f"{idx_so_far + j}_{i}.png")
                     )
                     if i == len(x)-1 or i == -1:
-                        orig = inverse_data_transform(config, x_orig[j])
-                        mse = torch.mean((x[i][j].to(self.device) - orig) ** 2)
+                        orig = 0.5 + 0.5 * ksp_to_viewable_image(inverse_data_transform(config, x_orig[j]))
+                        mse = torch.mean((0.5 + 0.5 * ksp_to_viewable_image(x[i][j].to(self.device)) - orig) ** 2)
                         psnr = 10 * torch.log10(1 / mse)
                         avg_psnr += psnr
 
