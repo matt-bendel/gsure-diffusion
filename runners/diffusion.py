@@ -138,6 +138,8 @@ class Diffusion(object):
             x_orig = x_orig.float().to(self.device)
             x_orig = data_transform(self.config, x_orig)
 
+            print(x_orig.shape)
+
             y_0 = H_funcs.H(x_orig)
             y_0 = y_0 + sigma_0 * torch.randn_like(y_0)
 
