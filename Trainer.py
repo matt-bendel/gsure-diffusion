@@ -148,9 +148,10 @@ class Trainer(Infra):
                         self.image, noisy_image, clean_image = self.base_change(self.image), self.base_change(noisy_image), self.base_change(clean_image)
                     base = {"epoch": self.epoch}
                     base.update(self.val_metrics.result())
-                    im = make_grid((0.5 + 0.5 * torch.cat([self.image, noisy_image, clean_image], dim=0)).clamp(0, 1), nrow=self.batch_size, padding=0)
-                    images = wandb.Image(im, caption="Top: Output, Bottom: Input")
-                    base.update({"images": images})
+                    if i == 0 and self.epoch % 5 == 0:
+                        im = make_grid((0.5 + 0.5 * torch.cat([self.image, noisy_image, clean_image], dim=0)).clamp(0, 1), nrow=self.batch_size, padding=0)
+                        images = wandb.Image(im, caption="Top: Output, Bottom: Input")
+                        base.update({"images": images})
                     self.wandb_run.log(base)
         return self.val_metrics.result()
 
