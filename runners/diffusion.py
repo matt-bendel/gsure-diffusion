@@ -92,8 +92,6 @@ class Diffusion(object):
         model = torch.nn.DataParallel(model)
         model.eval()
 
-        model = Model(self.config)
-
         self.sample_sequence(model, cls_fn)
 
     def sample_sequence(self, model, cls_fn=None):
