@@ -174,7 +174,7 @@ class Diffusion(object):
                     )
                     if i == len(x)-1 or i == -1:
                         orig = 0.5 + 0.5 * ksp_to_image(x_orig[j])
-                        mse = torch.mean((0.5 + 0.5 * x[i][j].to(self.device) - orig) ** 2)
+                        mse = torch.mean((0.5 + 0.5 * ksp_to_image(x[i])[j].to(self.device) - orig) ** 2)
                         psnr = 10 * torch.log10(1 / mse)
                         avg_psnr += psnr
 
