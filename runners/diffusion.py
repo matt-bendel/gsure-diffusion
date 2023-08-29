@@ -75,9 +75,9 @@ class Diffusion(object):
         )
         self.logvar = posterior_variance.clamp(min=1e-20).log()
 
-    def sample(self):
+    def sample(self, opt):
         cls_fn = None
-        model = define_network(phase_logger, self.config, self.config['model']['network'])
+        model = define_network(phase_logger, opt, opt['model']['network'])
         state_dict = torch.load(self.args.model_path)
         if 'module.temb.dense.0.weight' in state_dict:
             # model saved as DDP
@@ -86,9 +86,9 @@ class Diffusion(object):
             # wrapper saved instead of model
             state_dict = {k.replace("model.", ""): v for k, v in state_dict.items()}
         print(model.load_state_dict(state_dict))
-        if self.config['model']['model_wrapper'] if 'model_wrapper' in self.config['model'] else False:
+        if opt['model']['model_wrapper'] if 'model_wrapper' in opt['model'] else False:
             model = FFT_NN_Wrapper(model)
-        model = set_device(model, distributed=opt['distributed'])
+        model = model.to(self.device)
         model = torch.nn.DataParallel(model)
         model.eval()
 
