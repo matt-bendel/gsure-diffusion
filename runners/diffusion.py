@@ -110,7 +110,7 @@ class Diffusion(object):
         H_funcs = None
 
         from functions.svd_replacement import Inpainting
-        m = np.zeros((resolution, resolution))
+        m = np.zeros((384, 384))
 
         a = [1, 23, 42, 60, 77, 92, 105, 117, 128, 138, 147, 155, 162, 169, 176, 182, 184, 185, 186, 187, 188, 189, 190,
              191, 192, 193, 194, 195,
