@@ -158,6 +158,7 @@ def main():
     ''' parser configs '''
     import core.parser as Parser
     args.config = 'configs/mri_oracle.json'
+    args.phase = 'test'
     opt = Parser.parse(args)
 
     phase_logger = InfoLogger(opt)
