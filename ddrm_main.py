@@ -155,13 +155,9 @@ def main():
     logging.info("Exp instance id = {}".format(os.getpid()))
     logging.info("Exp comment = {}".format(args.comment))
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, default='configs/mri_oracle.json', help='JSON file for configuration')
-
     ''' parser configs '''
-    args = parser.parse_args()
-
     import core.parser as Parser
+    args.config = 'configs/mri_oracle.json'
     opt = Parser.parse(args)
 
     phase_logger = InfoLogger(opt)
