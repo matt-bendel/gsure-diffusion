@@ -11,7 +11,7 @@ import torch.utils.data as data
 from functions.denoising import efficient_generalized_steps
 from mri_utils import ksp_to_viewable_image, FFT_Wrapper, FFT_NN_Wrapper
 from core.parser import init_obj
-
+from data_loaders.CondMRIDataModule import CondMRIDataModule
 import torchvision.utils as tvu
 
 import random
@@ -103,7 +103,7 @@ class Diffusion(object):
         args.subset_start = 0
         args.subset_end = 72
 
-        dm = MRIDataModule()
+        dm = CondMRIDataModule()
         dm.setup()
         val_loader = dm.test_dataloader()
         
