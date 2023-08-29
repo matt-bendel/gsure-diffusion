@@ -115,18 +115,21 @@ class Inpainting(H_functions):
         self.missing_indices = missing_indices
         self.kept_indices = torch.Tensor([i for i in range(channels * img_dim**2) if i not in missing_indices]).to(device).long()
 
+        print(self.missing_indices.shape)
+        print(self.kept_indices.shape)
+
     def V(self, vec):
         temp = vec.clone().reshape(vec.shape[0], -1)
         out = torch.zeros_like(temp)
         out[:, self.kept_indices] = temp[:, :self.kept_indices.shape[0]]
-        out[:, self.missing_indices] = temp[:, self.missing_indices.shape[0]:]
+        out[:, self.missing_indices] = temp[:, self.kept_indices.shape[0]:]
         return out.reshape(vec.shape[0], -1, self.channels).permute(0, 2, 1).reshape(vec.shape[0], -1)
 
     def Vt(self, vec):
         temp = vec.clone().reshape(vec.shape[0], self.channels, -1).permute(0, 2, 1).reshape(vec.shape[0], -1)
         out = torch.zeros_like(temp)
         out[:, :self.kept_indices.shape[0]] = temp[:, self.kept_indices]
-        out[:, self.missing_indices.shape[0]:] = temp[:, self.missing_indices]
+        out[:, self.kept_indices.shape[0]:] = temp[:, self.missing_indices]
         return out
 
     def U(self, vec):
