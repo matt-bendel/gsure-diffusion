@@ -124,6 +124,7 @@ class Diffusion(object):
         missing_c = missing_r + 1
 
         missing = torch.cat([missing_r, missing_c], dim=0)
+        print(missing.shape)
         H_funcs = Inpainting(2, 384, missing, self.device)
 
         args.sigma_0 = 2 * args.sigma_0 #to account for scaling to [-1,1]
