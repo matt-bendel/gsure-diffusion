@@ -135,7 +135,7 @@ class Diffusion(object):
         avg_psnr = 0.0
         pbar = tqdm.tqdm(val_loader)
         for x_orig, classes in pbar:
-            x_orig = x_orig.to(self.device)
+            x_orig = x_orig.float().to(self.device)
             x_orig = data_transform(self.config, x_orig)
 
             y_0 = H_funcs.H(x_orig)
