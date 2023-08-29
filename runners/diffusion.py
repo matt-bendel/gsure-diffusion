@@ -75,7 +75,7 @@ class Diffusion(object):
         )
         self.logvar = posterior_variance.clamp(min=1e-20).log()
 
-    def sample(self, opt):
+    def sample(self, opt, phase_logger):
         cls_fn = None
         model = define_network(phase_logger, opt, opt['model']['network'])
         state_dict = torch.load(self.args.model_path)

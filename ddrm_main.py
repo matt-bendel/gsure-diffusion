@@ -169,7 +169,7 @@ def main():
 
     try:
         runner = Diffusion(args, config)
-        runner.sample(opt)
+        runner.sample(opt, phase_logger)
     except Exception:
         logging.error(traceback.format_exc())
 
