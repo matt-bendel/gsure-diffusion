@@ -138,9 +138,9 @@ class Diffusion(object):
             x_orig = x_orig.float().to(self.device)
             x_orig = data_transform(self.config, x_orig)
 
-            print(x_orig.shape)
-
             y_0 = H_funcs.H(x_orig)
+            print("HERE")
+            print(y_0.shape)
             y_0 = y_0 + sigma_0 * torch.randn_like(y_0)
 
             pinv_y_0 = H_funcs.H_pinv(y_0).view(y_0.shape[0], 2, 384, 384)
