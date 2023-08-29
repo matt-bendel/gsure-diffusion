@@ -142,11 +142,11 @@ class Diffusion(object):
             y_0 = y_0 + sigma_0 * torch.randn_like(y_0)
 
             pinv_y_0 = H_funcs.H_pinv(y_0).view(y_0.shape[0], 2, 384, 384)
-            pinv_y_0 += H_funcs.H_pinv(H_funcs.H(torch.ones_like(pinv_y_0))).reshape(*pinv_y_0.shape) - 1
+            # pinv_y_0 += H_funcs.H_pinv(H_funcs.H(torch.ones_like(pinv_y_0))).reshape(*pinv_y_0.shape) - 1
 
             for i in range(len(pinv_y_0)):
                 tvu.save_image(
-                    0.5 + 0.5 * ksp_to_viewable_image(y_0.view(y_0.shape[0], 2, 384, 384))[i], os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
+                    0.5 + 0.5 * ksp_to_viewable_image(pinv_y_0)[i], os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
                 )
                 tvu.save_image(
                     0.5 + 0.5 * ksp_to_viewable_image(x_orig)[i], os.path.join(self.args.image_folder, f"orig_{idx_so_far + i}.png")
@@ -166,6 +166,7 @@ class Diffusion(object):
                 x, _ = self.sample_image(x, model, H_funcs, y_0, sigma_0, last=False, cls_fn=cls_fn, classes=classes)
 
             x = [ksp_to_image(y) for y in x]
+            print(x.shape)
 
             for i in [-1]: #range(len(x)):
                 for j in range(x[i].size(0)):
