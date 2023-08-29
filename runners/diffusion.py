@@ -146,7 +146,7 @@ class Diffusion(object):
 
             for i in range(len(pinv_y_0)):
                 tvu.save_image(
-                    0.5 + 0.5 * ksp_to_viewable_image(pinv_y_0)[i], os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
+                    0.5 + 0.5 * ksp_to_viewable_image(y_0.view(y_0.shape[0], 2, 384, 384))[i], os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
                 )
                 tvu.save_image(
                     0.5 + 0.5 * ksp_to_viewable_image(x_orig)[i], os.path.join(self.args.image_folder, f"orig_{idx_so_far + i}.png")
