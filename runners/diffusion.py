@@ -166,7 +166,6 @@ class Diffusion(object):
                 x, _ = self.sample_image(x, model, H_funcs, y_0, sigma_0, last=False, cls_fn=cls_fn, classes=classes)
 
             x = [ksp_to_image(y) for y in x]
-            print(x.shape)
 
             for i in [-1]: #range(len(x)):
                 for j in range(x[i].size(0)):
