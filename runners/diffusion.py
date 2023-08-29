@@ -9,7 +9,7 @@ import torch
 import torch.utils.data as data
 
 from functions.denoising import efficient_generalized_steps
-from mri_utils import ksp_to_viewable_image, FFT_Wrapper, FFT_NN_Wrapper
+from mri_utils import ksp_to_viewable_image, FFT_Wrapper, FFT_NN_Wrapper, ksp_to_image
 from core.parser import init_obj
 from data_loaders.CondMRIDataModule import CondMRIDataModule
 import torchvision.utils as tvu
@@ -146,10 +146,10 @@ class Diffusion(object):
 
             for i in range(len(pinv_y_0)):
                 tvu.save_image(
-                    inverse_data_transform(config, 0.5 + 0.5 * ksp_to_viewable_image(pinv_y_0[i])), os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
+                    0.5 + 0.5 * ksp_to_viewable_image(pinv_y_0[i]), os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
                 )
                 tvu.save_image(
-                    inverse_data_transform(config, 0.5 + 0.5 * ksp_to_viewable_image(x_orig[i])), os.path.join(self.args.image_folder, f"orig_{idx_so_far + i}.png")
+                    0.5 + 0.5 * ksp_to_viewable_image(x_orig[i]), os.path.join(self.args.image_folder, f"orig_{idx_so_far + i}.png")
                 )
 
             ##Begin DDIM
@@ -165,16 +165,16 @@ class Diffusion(object):
             with torch.no_grad():
                 x, _ = self.sample_image(x, model, H_funcs, y_0, sigma_0, last=False, cls_fn=cls_fn, classes=classes)
 
-            x = [inverse_data_transform(config, y) for y in x]
+            x = [ksp_to_image(y) for y in x]
 
             for i in [-1]: #range(len(x)):
                 for j in range(x[i].size(0)):
                     tvu.save_image(
-                        0.5 + 0.5 * ksp_to_viewable_image(x[i][j]), os.path.join(self.args.image_folder, f"{idx_so_far + j}_{i}.png")
+                        0.5 + 0.5 * x[i][j], os.path.join(self.args.image_folder, f"{idx_so_far + j}_{i}.png")
                     )
                     if i == len(x)-1 or i == -1:
-                        orig = 0.5 + 0.5 * ksp_to_viewable_image(inverse_data_transform(config, x_orig[j]))
-                        mse = torch.mean((0.5 + 0.5 * ksp_to_viewable_image(x[i][j].to(self.device)) - orig) ** 2)
+                        orig = 0.5 + 0.5 * ksp_to_image(x_orig[j])
+                        mse = torch.mean((0.5 + 0.5 * x[i][j].to(self.device) - orig) ** 2)
                         psnr = 10 * torch.log10(1 / mse)
                         avg_psnr += psnr
 
