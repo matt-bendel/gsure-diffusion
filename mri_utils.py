@@ -8,7 +8,11 @@ import torch.fft
 def ksp_to_image(ksp):
     # undo data normalization
     ksp = ksp * 7e-5
-    return complex_abs(ifft2c_new(ksp.permute(0, 2, 3, 1))).unsqueeze(1)
+
+    if len(ksp.shape) == 4:
+        return complex_abs(ifft2c_new(ksp.permute(0, 2, 3, 1))).unsqueeze(1)
+    else:
+        return complex_abs(ifft2c_new(ksp.permute(1, 2, 0))).unsqueeze(1)
 
 def ksp_to_viewable_image(ksp, set_min=None, set_max=None):
     # to image
