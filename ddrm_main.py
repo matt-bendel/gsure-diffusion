@@ -161,6 +161,7 @@ def main():
     args.phase = 'test'
     args.gpu_ids = '0,1,2,3'
     args.batch = 4
+    args.debug = False
     opt = Parser.parse(args)
 
     phase_logger = InfoLogger(opt)
