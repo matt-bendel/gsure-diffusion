@@ -160,6 +160,7 @@ def main():
     args.config = 'configs/mri_oracle.json'
     args.phase = 'test'
     args.gpu_ids = '0,1,2,3'
+    args.batch = 4
     opt = Parser.parse(args)
 
     phase_logger = InfoLogger(opt)
