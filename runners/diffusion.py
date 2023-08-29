@@ -165,12 +165,12 @@ class Diffusion(object):
             with torch.no_grad():
                 x, _ = self.sample_image(x, model, H_funcs, y_0, sigma_0, last=False, cls_fn=cls_fn, classes=classes)
 
-            x = [ksp_to_image(y) for y in x]
+            x = [y for y in x]
 
             for i in [-1]: #range(len(x)):
                 for j in range(x[i].size(0)):
                     tvu.save_image(
-                        0.5 + 0.5 * x[i][j], os.path.join(self.args.image_folder, f"{idx_so_far + j}_{i}.png")
+                        0.5 + 0.5 * ksp_to_viewable_image(x[i])[j], os.path.join(self.args.image_folder, f"{idx_so_far + j}_{i}.png")
                     )
                     if i == len(x)-1 or i == -1:
                         orig = 0.5 + 0.5 * ksp_to_image(x_orig[j])
