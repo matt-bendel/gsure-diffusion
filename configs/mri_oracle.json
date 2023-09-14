@@ -79,7 +79,7 @@
                 "out_channels":  2,
                 "ch_mult":  [1, 1, 2, 2, 4, 4],
                 "num_res_blocks":  2,
-                "attn_resolutions":  [20],
+                "attn_resolutions":  [24],
                 "dropout":  0.1,
                 "image_size":  384,
                 "resamp_with_conv": true
@@ -98,8 +98,8 @@
     },
 
     "train": { // arguments for basic training
-        "n_epoch": 80, // max epochs, not limited now
-        "n_iter": 31000, // max interations
+        "n_epoch": 150, // max epochs, not limited now
+        "n_iter": 310000, // max interations
         "val_epoch": 1, // valdation every specified number of epochs
         "save_checkpoint_epoch": 5,
         "log_iter": 1e2, // log every specified number of iterations
