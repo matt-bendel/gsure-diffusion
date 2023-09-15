@@ -152,7 +152,7 @@ class MRI(H_functions):
         self._singulars[missing_indices] = 0
 
     def V(self, vec):
-        temp = vec.clone()
+        temp = vec.clone().reshape(vec.shape[0], self.channels, self.img_dim, self.img_dim)
         ifft_out = ifft2c_new(temp.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
 
         return ifft_out.reshape(ifft_out.shape[0], -1)
