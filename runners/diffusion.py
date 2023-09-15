@@ -123,7 +123,7 @@ class Diffusion(object):
         m[:, a] = 1
         m[:, 176:208] = 1
 
-        mask_np = np.tile(samp, (2, 1, 1))
+        mask_np = np.tile(m, (2, 1, 1))
 
         mask = torch.from_numpy(mask_np).to(self.device).reshape(-1)
         missing_inds = mask == 0
