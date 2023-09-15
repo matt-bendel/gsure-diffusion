@@ -152,14 +152,16 @@ class MRI(H_functions):
         self._singulars[missing_indices] = 0
 
     def V(self, vec):
-        ifft_out = ifft2c_new(vec.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
+        temp = vec.clone()
+        ifft_out = ifft2c_new(temp.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
 
-        return vec.clone().reshape(ifft_out.shape[0], -1)
+        return ifft_out.reshape(ifft_out.shape[0], -1)
 
     def Vt(self, vec):
-        fft_out = fft2c_new(vec.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
+        temp = vec.clone()
+        fft_out = fft2c_new(temp.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
 
-        return vec.clone().reshape(fft_out.shape[0], -1)
+        return fft_out.reshape(fft_out.shape[0], -1)
 
     def U(self, vec):
         return vec.clone().reshape(vec.shape[0], -1)
