@@ -128,7 +128,7 @@ class Diffusion(object):
         sigma = 10
         pdf = lambda x: torch.exp(torch.Tensor([-0.5 * (x / sigma) ** 2]))
         kernel = torch.Tensor([pdf(-2), pdf(-1), pdf(0), pdf(1), pdf(2)]).to(self.device)
-        H_funcs = Deblurring(kernel / kernel.sum(), config.data.channels, self.config.data.image_size, self.device)
+        H_funcs = Deblurring(kernel / kernel.sum(), 2, 384, self.device)
 
         args.sigma_0 = 2 * args.sigma_0 #to account for scaling to [-1,1]
         sigma_0 = args.sigma_0
