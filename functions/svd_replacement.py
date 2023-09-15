@@ -1,5 +1,5 @@
 import torch
-
+from mri_utils import fft2c_new, ifft2c_new
 class H_functions:
     """
     A class replacing the SVD of a matrix H, perhaps efficiently.
@@ -128,6 +128,38 @@ class Inpainting(H_functions):
         out[:, :self.kept_indices.shape[0]] = temp[:, self.kept_indices]
         out[:, self.kept_indices.shape[0]:] = temp[:, self.missing_indices]
         return out
+
+    def U(self, vec):
+        return vec.clone().reshape(vec.shape[0], -1)
+
+    def Ut(self, vec):
+        return vec.clone().reshape(vec.shape[0], -1)
+
+    def singulars(self):
+        return self._singulars
+
+    def add_zeros(self, vec):
+        temp = torch.zeros((vec.shape[0], self.channels * self.img_dim**2), device=vec.device)
+        reshaped = vec.clone().reshape(vec.shape[0], -1)
+        temp[:, :reshaped.shape[1]] = reshaped
+        return temp
+
+class MRI(H_functions):
+    def __init__(self, channels, img_dim, missing_indices, device):
+        self.channels = channels
+        self.img_dim = img_dim
+        self._singulars = torch.ones(channels * img_dim**2).to(device)
+        self._singulars[missing_indices] = 0
+
+    def V(self, vec):
+        ifft_out = ifft2c_new(vec.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
+
+        return vec.clone().reshape(ifft_out.shape[0], -1)
+
+    def Vt(self, vec):
+        fft_out = fft2c_new(vec.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
+
+        return vec.clone().reshape(fft_out.shape[0], -1)
 
     def U(self, vec):
         return vec.clone().reshape(vec.shape[0], -1)

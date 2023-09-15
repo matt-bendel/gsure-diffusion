@@ -109,26 +109,26 @@ class Diffusion(object):
         ## get degradation matrix ##
         H_funcs = None
 
-        from functions.svd_replacement import Inpainting, Deblurring
+        from functions.svd_replacement import MRI
         m = np.zeros((384, 384))
 
-        a = [1, 23, 42, 60, 77, 92, 105, 117, 128, 138, 147, 155, 162, 169, 176, 182, 184, 185, 186, 187, 188, 189, 190,
-             191, 192, 193, 194, 195,
-             196, 197, 198, 199, 200, 204, 210, 217, 224, 231, 239, 248, 258, 269, 281, 294, 309, 326, 344, 363]
+        a = [0, 10, 19, 28, 37, 46, 54, 61, 69, 76, 83, 89, 95, 101, 107, 112, 118, 122, 127, 132, 136, 140, 144,
+             148, 151, 155, 158, 161, 164,
+             167, 170, 173, 176, 178, 181, 183, 186, 188, 191, 193, 196, 198, 201, 203, 206, 208, 211, 214, 217,
+             220, 223, 226, 229, 233, 236,
+             240, 244, 248, 252, 257, 262, 266, 272, 277, 283, 289, 295, 301, 308, 315, 323, 330, 338, 347, 356,
+             365, 374]
 
         a = np.array(a)
         m[:, a] = 1
+        m[:, 176:208] = 1
 
-        mask = torch.from_numpy(m).to(self.device).reshape(-1)
-        missing_r = torch.nonzero(mask == 0).long().reshape(-1) * 2
-        missing_c = missing_r + 1
+        mask_np = np.tile(samp, (2, 1, 1))
 
-        missing = torch.cat([missing_r, missing_c], dim=0)
-        H_funcs = Inpainting(2, 384, missing, self.device)
-        sigma = 10
-        pdf = lambda x: torch.exp(torch.Tensor([-0.5 * (x / sigma) ** 2]))
-        kernel = torch.Tensor([pdf(-2), pdf(-1), pdf(0), pdf(1), pdf(2)]).to(self.device)
-        H_funcs = Deblurring(kernel / kernel.sum(), 2, 384, self.device)
+        mask = torch.from_numpy(mask_np).to(self.device).reshape(-1)
+        missing_inds = mask == 0
+
+        H_funcs = MRI(2, 384, missing_inds.nonzero(), self.device)
 
         args.sigma_0 = 2 * args.sigma_0 #to account for scaling to [-1,1]
         sigma_0 = args.sigma_0
