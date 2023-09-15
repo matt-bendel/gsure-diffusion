@@ -153,13 +153,13 @@ class MRI(H_functions):
 
     def V(self, vec):
         temp = vec.clone().view(vec.shape[0], self.channels, self.img_dim, self.img_dim)
-        ifft_out = ifft2c_new(temp.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
+        # ifft_out = ifft2c_new(temp.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
 
         return temp.reshape(ifft_out.shape[0], -1)
 
     def Vt(self, vec):
         temp = vec.clone()
-        fft_out = fft2c_new(temp.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
+        # fft_out = fft2c_new(temp.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
 
         return temp.reshape(fft_out.shape[0], -1)
 
