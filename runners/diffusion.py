@@ -9,7 +9,7 @@ import torch
 import torch.utils.data as data
 
 from functions.denoising import efficient_generalized_steps
-from mri_utils import ksp_to_viewable_image, FFT_Wrapper, FFT_NN_Wrapper, ksp_to_image
+from mri_utils import ksp_to_viewable_image, FFT_Wrapper, FFT_NN_Wrapper, ksp_to_image, ifft2c_new, fft2c_new
 from core.parser import init_obj
 from data_loaders.CondMRIDataModule import CondMRIDataModule
 import torchvision.utils as tvu
@@ -141,6 +141,7 @@ class Diffusion(object):
         for x_orig, classes in pbar:
             x_orig = x_orig.float().to(self.device)
             x_orig = data_transform(self.config, x_orig)
+            x_orig = ifft2c_new(x_orig.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
 
             y_0 = H_funcs.H(x_orig)
             y_0 = y_0 + sigma_0 * torch.randn_like(y_0)
