@@ -109,7 +109,7 @@ class Diffusion(object):
         ## get degradation matrix ##
         H_funcs = None
 
-        from functions.svd_replacement import Inpainting, Denoising
+        from functions.svd_replacement import Inpainting, Deblurring
         m = np.zeros((384, 384))
 
         a = [1, 23, 42, 60, 77, 92, 105, 117, 128, 138, 147, 155, 162, 169, 176, 182, 184, 185, 186, 187, 188, 189, 190,
@@ -125,7 +125,10 @@ class Diffusion(object):
 
         missing = torch.cat([missing_r, missing_c], dim=0)
         H_funcs = Inpainting(2, 384, missing, self.device)
-        H_funcs = Denoising(2, 384, self.device)
+        sigma = 10
+        pdf = lambda x: torch.exp(torch.Tensor([-0.5 * (x / sigma) ** 2]))
+        kernel = torch.Tensor([pdf(-2), pdf(-1), pdf(0), pdf(1), pdf(2)]).to(self.device)
+        H_funcs = Deblurring(kernel / kernel.sum(), config.data.channels, self.config.data.image_size, self.device)
 
         args.sigma_0 = 2 * args.sigma_0 #to account for scaling to [-1,1]
         sigma_0 = args.sigma_0
