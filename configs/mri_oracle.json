@@ -10,7 +10,7 @@
         "tb_logger": "/storage/matt_models/mri/diffusion/tb_logger", // path of tensorboard logger
         "results": "/storage/matt_models/mri/diffusion/results",
         "checkpoint": "/storage/matt_models/mri/diffusion/checkpoint",
-        "resume_state": "/storage/matt_models/mri/diffusion/checkpoint/200.state"
+        "resume_state": "/storage/matt_models/mri/diffusion/checkpoint/200"
         // "resume_state": null // ex: 100, loading .state  and .pth from given epoch and iteration
     },
 

@@ -153,12 +153,12 @@ class Infra():
 
     def resume_training(self):
         """ resume the optimizers and schedulers for training, only work when phase is test or resume training enable """
-        if self.phase!='train' or self. opt['path']['resume_state'] is None:
+        if self.phase!='train' or self.opt['path']['resume_state'] is None:
             return
         self.logger.info('Beign loading training states'.format())
         assert isinstance(self.optimizers, list) and isinstance(self.schedulers, list), 'optimizers and schedulers must be a list.'
         
-        state_path = "{}.state".format(self. opt['path']['resume_state'])
+        state_path = "{}.state".format(self.opt['path']['resume_state'])
         
         if not os.path.exists(state_path):
             self.logger.warning('Training state in [{:s}] does not exist, Skip it'.format(state_path))
