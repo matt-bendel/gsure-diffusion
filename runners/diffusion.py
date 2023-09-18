@@ -153,7 +153,7 @@ class Diffusion(object):
             print(cond.max())
             for i in range(len(pinv_y_0)):
                 tvu.save_image(
-                    0.5 + 0.5 * ksp_to_viewable_image(y_0)[i], os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
+                    0.5 + 0.5 * ksp_to_viewable_image(cond)[i], os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
                 )
                 # torch.save(ksp_to_image(pinv_y_0)[i], os.path.join(self.args.image_folder, f'{fname[i]}_{slice[i]}_cond.pt'))
                 tvu.save_image(
