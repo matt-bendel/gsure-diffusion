@@ -149,7 +149,7 @@ class Diffusion(object):
             pinv_y_0 = H_funcs.H_pinv(y_0).view(y_0.shape[0], 2, 384, 384)
             # pinv_y_0 += H_funcs.H_pinv(H_funcs.H(torch.ones_like(pinv_y_0))).reshape(*pinv_y_0.shape) - 1
 
-            cond = ksp_to_image(y_0)
+            cond = ksp_to_image(y_0.view(y_0.shape[0], 2, 384, 384))
             print(cond.max())
             for i in range(len(pinv_y_0)):
                 tvu.save_image(
