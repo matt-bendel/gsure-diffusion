@@ -181,7 +181,7 @@ class Diffusion(object):
                         # tvu.save_image(
                         #     0.5 + 0.5 * ksp_to_viewable_image(x[i])[j], os.path.join(self.args.image_folder, f"{idx_so_far + j}_{i}.png")
                         # )
-                        torch.save(ksp_to_image(x[i])[j], os.path.join(self.args.image_folder, f'{fname[idx_so_far]}_{slice[idx_so_far]}_sample_{P}.pt'))
+                        torch.save(ksp_to_image(x[i])[j], os.path.join(self.args.image_folder, f'{fname[j]}_{slice[j]}_sample_{P}.pt'))
                         if i == len(x)-1 or i == -1:
                             orig = 0.5 + 0.5 * ksp_to_image(gt[j])
                             mse = torch.mean((0.5 + 0.5 * ksp_to_image(x[i])[j].to(self.device) - orig) ** 2)
