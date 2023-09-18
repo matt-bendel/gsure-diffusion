@@ -138,7 +138,7 @@ class Diffusion(object):
         idx_so_far = args.subset_start
         avg_psnr = 0.0
         pbar = tqdm.tqdm(val_loader)
-        for x_orig, classes in pbar:
+        for x_orig, classes, fname, slice in pbar:
             x_orig = x_orig.float().to(self.device)
             x_orig = data_transform(self.config, x_orig)
             # x_orig = ifft2c_new(x_orig.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
@@ -153,10 +153,13 @@ class Diffusion(object):
                 tvu.save_image(
                     0.5 + 0.5 * ksp_to_viewable_image(pinv_y_0)[i], os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
                 )
+                # torch.save(ksp_to_image(pinv_y_0)[i], os.path.join(self.args.image_folder, f'{fname[i]}_{slice[i]}_cond.pt'))
                 tvu.save_image(
                     0.5 + 0.5 * ksp_to_viewable_image(x_orig)[i], os.path.join(self.args.image_folder, f"orig_{idx_so_far + i}.png")
                 )
+                # torch.save(ksp_to_image(x_orig)[i], os.path.join(self.args.image_folder, f'{fname[i]}_{slice[i]}_gt.pt'))
 
+            exit()
             ##Begin DDIM
             x = torch.randn(
                 y_0.shape[0],
@@ -177,6 +180,7 @@ class Diffusion(object):
                     tvu.save_image(
                         0.5 + 0.5 * ksp_to_viewable_image(x[i])[j], os.path.join(self.args.image_folder, f"{idx_so_far + j}_{i}.png")
                     )
+                    # torch.save(ksp_to_image(x[i])[j], os.path.join(self.args.image_folder, f'{fname[j]}_{slice[j]}_sample_{P}.pt'))
                     if i == len(x)-1 or i == -1:
                         orig = 0.5 + 0.5 * ksp_to_image(x_orig[j])
                         mse = torch.mean((0.5 + 0.5 * ksp_to_image(x[i])[j].to(self.device) - orig) ** 2)

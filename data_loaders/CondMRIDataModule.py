@@ -63,7 +63,7 @@ class DataTransform:
         coil_combined_x = S.H * coil_compressed_x.transpose(2, 0, 1)
         gt_ksp = fft(coil_combined_x, (0, 1))
 
-        return np.concatenate([np.expand_dims(np.real(gt_ksp), axis=0), np.expand_dims(np.imag(gt_ksp), axis=0)], axis=0), np.concatenate([np.expand_dims(np.real(gt_ksp), axis=0), np.expand_dims(np.imag(gt_ksp), axis=0)], axis=0)
+        return np.concatenate([np.expand_dims(np.real(gt_ksp), axis=0), np.expand_dims(np.imag(gt_ksp), axis=0)], axis=0), np.concatenate([np.expand_dims(np.real(gt_ksp), axis=0), np.expand_dims(np.imag(gt_ksp), axis=0)], axis=0). fname, slice
 
 
 def reduce_resolution(im):
