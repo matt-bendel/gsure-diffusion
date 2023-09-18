@@ -134,11 +134,11 @@ class Diffusion(object):
         sigma_0 = args.sigma_0
         
         print(f'Start from {args.subset_start}')
-        idx_init = args.subset_start
-        idx_so_far = args.subset_start
-        avg_psnr = 0.0
-        pbar = tqdm.tqdm(val_loader)
         for P in range(1):
+            idx_init = args.subset_start
+            idx_so_far = args.subset_start
+            avg_psnr = 0.0
+            pbar = tqdm.tqdm(val_loader)
             for x_orig, classes, fname, slice in pbar:
                 x_orig = x_orig.float().to(self.device)
                 x_orig = data_transform(self.config, x_orig)
