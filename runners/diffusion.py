@@ -152,14 +152,14 @@ class Diffusion(object):
                 # pinv_y_0 += H_funcs.H_pinv(H_funcs.H(torch.ones_like(pinv_y_0))).reshape(*pinv_y_0.shape) - 1
 
                 for i in range(len(pinv_y_0)):
-                    tvu.save_image(
-                        0.5 + 0.5 * ksp_to_viewable_image(pinv_y_0)[i], os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
-                    )
-                    # torch.save(ksp_to_image(pinv_y_0)[i], os.path.join(self.args.image_folder, f'{fname[i]}_{slice[i]}_cond.pt'))
-                    tvu.save_image(
-                        0.5 + 0.5 * ksp_to_viewable_image(x_orig)[i], os.path.join(self.args.image_folder, f"orig_{idx_so_far + i}.png")
-                    )
-                    # torch.save(ksp_to_image(gt)[i], os.path.join(self.args.image_folder, f'{fname[i]}_{slice[i]}_gt.pt'))
+                    # tvu.save_image(
+                    #     0.5 + 0.5 * ksp_to_viewable_image(pinv_y_0)[i], os.path.join(self.args.image_folder, f"y0_{idx_so_far + i}.png")
+                    # )
+                    torch.save(ksp_to_image(pinv_y_0)[i], os.path.join(self.args.image_folder, f'{fname[i]}_{slice[i]}_cond.pt'))
+                    # tvu.save_image(
+                    #     0.5 + 0.5 * ksp_to_viewable_image(x_orig)[i], os.path.join(self.args.image_folder, f"orig_{idx_so_far + i}.png")
+                    # )
+                    torch.save(ksp_to_image(gt)[i], os.path.join(self.args.image_folder, f'{fname[i]}_{slice[i]}_gt.pt'))
 
                 ##Begin DDIM
                 x = torch.randn(
@@ -178,10 +178,10 @@ class Diffusion(object):
 
                 for i in [-1]: #range(len(x)):
                     for j in range(x[i].size(0)):
-                        tvu.save_image(
-                            0.5 + 0.5 * ksp_to_viewable_image(x[i])[j], os.path.join(self.args.image_folder, f"{idx_so_far + j}_{i}.png")
-                        )
-                        # torch.save(ksp_to_image(x[i])[j], os.path.join(self.args.image_folder, f'{fname[j]}_{slice[j]}_sample_{P}.pt'))
+                        # tvu.save_image(
+                        #     0.5 + 0.5 * ksp_to_viewable_image(x[i])[j], os.path.join(self.args.image_folder, f"{idx_so_far + j}_{i}.png")
+                        # )
+                        torch.save(ksp_to_image(x[i])[j], os.path.join(self.args.image_folder, f'{fname[j]}_{slice[j]}_sample_{P}.pt'))
                         if i == len(x)-1 or i == -1:
                             orig = 0.5 + 0.5 * ksp_to_image(gt[j])
                             mse = torch.mean((0.5 + 0.5 * ksp_to_image(x[i])[j].to(self.device) - orig) ** 2)
