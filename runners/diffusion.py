@@ -188,7 +188,6 @@ class Diffusion(object):
                             avg_psnr += psnr
 
             idx_so_far += y_0.shape[0]
-            exit()
 
             pbar.set_description("PSNR: %.2f" % (avg_psnr / (idx_so_far - idx_init)))
 
