@@ -138,8 +138,8 @@ class Diffusion(object):
         idx_so_far = args.subset_start
         avg_psnr = 0.0
         pbar = tqdm.tqdm(val_loader)
-        for x_orig, classes, fname, slice in pbar:
-            for P in range(32):
+        for P in range(1):
+            for x_orig, classes, fname, slice in pbar:
                 x_orig = x_orig.float().to(self.device)
                 x_orig = data_transform(self.config, x_orig)
                 # x_orig = ifft2c_new(x_orig.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
@@ -187,13 +187,13 @@ class Diffusion(object):
                             psnr = 10 * torch.log10(1 / mse)
                             avg_psnr += psnr
 
-            idx_so_far += y_0.shape[0]
+                idx_so_far += y_0.shape[0]
 
-            pbar.set_description("PSNR: %.2f" % (avg_psnr / (idx_so_far - idx_init)))
+                pbar.set_description("PSNR: %.2f" % (avg_psnr / (idx_so_far - idx_init)))
 
-        avg_psnr = avg_psnr / (idx_so_far - idx_init)
-        print("Total Average PSNR: %.2f" % avg_psnr)
-        print("Number of samples: %d" % (idx_so_far - idx_init))
+            avg_psnr = avg_psnr / (idx_so_far - idx_init)
+            print("Total Average PSNR: %.2f" % avg_psnr)
+            print("Number of samples: %d" % (idx_so_far - idx_init))
 
     def sample_image(self, x, model, H_funcs, y_0, sigma_0, last=True, cls_fn=None, classes=None):
         skip = self.num_timesteps // self.args.timesteps
