@@ -138,7 +138,7 @@ class Diffusion(object):
         idx_so_far = args.subset_start
         avg_psnr = 0.0
         pbar = tqdm.tqdm(val_loader)
-        num_P = 32
+        num_P = 1
         for x_orig, classes, fname, slice in pbar:
             for P in range(num_P):
                 gt = x_orig.float().to(self.device)
@@ -190,7 +190,7 @@ class Diffusion(object):
 
                 if P == num_P - 1:
                     idx_so_far += y_0.shape[0]
-
+                exit()
             # pbar.set_description("PSNR: %.2f" % (avg_psnr / (idx_so_far - idx_init)))
 
         # avg_psnr = avg_psnr / (idx_so_far - idx_init)
